@@ -10,8 +10,11 @@ export class UsersService {
     @Inject('UserModel') private modelClass: ModelClass<UserModel>
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.modelClass.query().insert(
+      createUserDto,
+    );
+    return user;
   }
 
   findAll() {

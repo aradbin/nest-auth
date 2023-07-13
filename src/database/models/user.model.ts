@@ -5,4 +5,6 @@ export class UserModel extends BaseModel {
 
   name: string;
   email: string;
+  password: string;
+  verified: boolean;
 }
