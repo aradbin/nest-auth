@@ -8,4 +8,10 @@ export class BaseModel extends Model {
     updated_by: number;
     deleted_at: string;
     deleted_by: number;
+
+    softDelete(){
+        this.$query().update({
+            deleted_at: 'asd'
+        })
+    }
 }

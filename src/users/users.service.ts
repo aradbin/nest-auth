@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdateUserDto, DeleteUserDto } from './users.dto';
 import { ModelClass } from 'objection';
 import { UserModel } from 'src/database/models/user.model';
 
@@ -11,9 +10,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.modelClass.query().insert(
-      createUserDto,
-    );
+    const user = await this.modelClass.query().insert(createUserDto)
     return user;
   }
 
@@ -25,11 +22,22 @@ export class UsersService {
     return this.modelClass.query().findById(id)
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    updateUserDto.updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
+    updateUserDto.updated_by = null
+    await this.modelClass.query().findById(id).update(updateUserDto)
+    const user = await this.modelClass.query().findById(id)
+    
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const deleteUserDto: DeleteUserDto = {
+      deleted_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      deleted_by: null
+    }
+    await this.modelClass.query().findById(id).update(deleteUserDto)
+    
+    return id;
   }
 }
