@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { UserModel } from 'src/database/models/user.model';
-import { CreateUserDto, DeleteUserDto, UpdateUserDto } from './users.dto';
+import { CreateUserDto, UpdateUserDto } from './users.dto';
 
 @Injectable()
 export class UsersService {
@@ -20,18 +20,18 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.modelClass.query().findById(id)
+    return this.modelClass.query().findById(id).where('deleted_at', null)
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.modelClass.query().updateAndFetchById(id, updateUserDto)
+    const user = await this.modelClass.query().updateAndFetchById(id, updateUserDto).where('deleted_at', null)
     
-    return user;
+    return user
   }
 
   async remove(id: number) {
-    await this.modelClass.query().deleteById(id)
+    await this.modelClass.query().findById(id).softDelete().where('deleted_at', null)
     
-    return id;
+    return id
   }
 }

@@ -1,4 +1,5 @@
-import { Model, StaticHookArguments } from 'objection';
+import { Model } from 'objection';
+import { DeleteQueryBuilder } from '../queries/DeleteQueryBuilder';
 
 export class BaseModel extends Model {
     readonly id: number;
@@ -9,19 +10,14 @@ export class BaseModel extends Model {
     deleted_at: string;
     deleted_by: number;
 
+    QueryBuilderType!: DeleteQueryBuilder<this>;
+    static QueryBuilder = DeleteQueryBuilder;
+
     $beforeInsert() {
         this.created_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
     }
 
     $beforeUpdate() {
         this.updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    }
-
-    static async beforeDelete(args: StaticHookArguments<any, any>) {
-        const softDelete = await args.asFindQuery().update({
-            deleted_at: new Date().toISOString().slice(0, 19).replace('T', ' ')
-        });
-        
-        args.cancelQuery(softDelete);
     }
 }

@@ -13,8 +13,3 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     updated_at: string;
     updated_by: number;
 }
-
-export class DeleteUserDto extends PartialType(UpdateUserDto) {
-    deleted_at: string;
-    deleted_by: number;
-}
