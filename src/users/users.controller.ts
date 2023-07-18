@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UnprocessableEntityException } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './users.dto';
 import { Response } from 'express';
+import { CreateUserDto, UpdateUserDto } from './users.dto';
 
 @Controller('users')
 export class UsersController {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto, DeleteUserDto } from './users.dto';
 import { ModelClass } from 'objection';
 import { UserModel } from 'src/database/models/user.model';
+import { CreateUserDto, DeleteUserDto, UpdateUserDto } from './users.dto';
 
 @Injectable()
 export class UsersService {
@@ -10,7 +10,8 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.modelClass.query().insert(createUserDto)
+    const user = await this.modelClass.query().insertAndFetch(createUserDto)
+    
     return user;
   }
 
@@ -23,20 +24,13 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    updateUserDto.updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
-    updateUserDto.updated_by = null
-    await this.modelClass.query().findById(id).update(updateUserDto)
-    const user = await this.modelClass.query().findById(id)
+    const user = await this.modelClass.query().updateAndFetchById(id, updateUserDto)
     
     return user;
   }
 
   async remove(id: number) {
-    const deleteUserDto: DeleteUserDto = {
-      deleted_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
-      deleted_by: null
-    }
-    await this.modelClass.query().findById(id).update(deleteUserDto)
+    await this.modelClass.query().deleteById(id)
     
     return id;
   }
