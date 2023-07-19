@@ -1,13 +1,5 @@
 import { PartialType } from "@nestjs/mapped-types";
-
-export class CreateUserDto {
-    name: string;
-    email: string;
-    password: string;
-    verified: boolean;
-    created_at: string;
-    created_by: number;
-}
+import { CreateUserDto } from "./create-user.dto";
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
     updated_at: string;

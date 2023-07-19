@@ -1,13 +1,13 @@
-import { BaseModel } from './base.model';
+import { BaseModel } from "src/database/base.model";
 
 export class UserModel extends BaseModel {
   static tableName = 'users';
 
-  name: string;
-  email: string;
-  contact: string;
-  password: string;
-  verified: boolean;
+  // name: string;
+  // email: string;
+  // contact: string;
+  // password: string;
+  // verified: boolean;
 
   static jsonSchema = {
     type: 'object',

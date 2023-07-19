@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Global, Module } from "@nestjs/common";
-import { UserModel } from "./models/user.model";
+import { UserModel } from "../users/user.model";
 import { Model, knexSnakeCaseMappers } from "objection";
 import Knex from 'knex';
 const models = [UserModel];
