@@ -17,7 +17,7 @@ export class UsersService {
   }
 
   findAll(params: any = {}) {
-    return this.modelClass.query().paginate(params)
+    return this.modelClass.query().find().paginate(params)
   }
 
   findOne(id: number) {
@@ -31,7 +31,7 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    await this.modelClass.query().findById(id).delete()
+    await this.modelClass.query().find().findById(id).delete()
     
     return id
   }

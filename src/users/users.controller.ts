@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UnprocessableEntityException, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UnprocessableEntityException, Query, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -9,10 +9,10 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Res() response: Response) {
+  async create(@Body() createUserDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
     try {
       const user = await this.usersService.create(createUserDto);
-      return response.status(201).send({
+      return response.status(HttpStatus.CREATED).send({
         message: 'New User Created Successfully',
         data: user
       })
@@ -32,10 +32,10 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res() response: Response) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Res({ passthrough: true }) response: Response) {
     try {
       const user = await this.usersService.update(+id, updateUserDto);
-      return response.status(200).send({
+      return response.status(HttpStatus.OK).send({
         message: 'User Updated Successfully',
         data: user
       })
@@ -45,10 +45,10 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() response: Response) {
+  async remove(@Param('id') id: string, @Res({ passthrough: true }) response: Response) {
     try {
       const user = await this.usersService.remove(+id);
-      return response.status(200).send({
+      return response.status(HttpStatus.OK).send({
         message: 'User Deleted Successfully',
         data: user
       })
