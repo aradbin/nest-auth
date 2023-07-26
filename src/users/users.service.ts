@@ -11,28 +11,24 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = await this.modelClass.query().insertAndFetch(createUserDto)
-    
-    return user;
+    return await this.modelClass.query().insert(createUserDto);
   }
 
-  findAll(params: any = {}) {
-    return this.modelClass.query().find().paginate(params)
+  async findAll(params: any = {}) {
+    return await this.modelClass.query().find().paginate(params)
   }
 
-  findOne(id: number) {
-    return this.modelClass.query().find().findById(id)
+  async findOne(id: number) {
+    return await this.modelClass.query().find().findById(id)
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.modelClass.query().updateAndFetchById(id, updateUserDto)
+    const user = await this.modelClass.query().findById(id).update(updateUserDto)
     
     return user
   }
 
   async remove(id: number) {
-    await this.modelClass.query().find().findById(id).delete()
-    
-    return id
+    return await this.modelClass.query().softDelete(id)
   }
 }

@@ -12,11 +12,11 @@ export class CustomQueryBuilder<M extends Model, R = M[]> extends QueryBuilder<M
         return this.where('deleted_at', null)
     }
 
-    softDelete() {
+    softDelete(id: number) {
         const patch = {};
         patch['deleted_at'] = new Date().toISOString().slice(0, 19).replace('T', ' ');
         
-        return this.patch(patch);
+        return this.findById(id).patch(patch);
     }
 
     paginate(params: any) {
