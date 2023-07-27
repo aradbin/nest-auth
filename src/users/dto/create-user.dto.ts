@@ -11,11 +11,15 @@ export class CreateUserDto {
     
     @IsOptional()
     @IsString()
-    contact: string;
+    username: string;
 
     @IsOptional()
     @IsString()
     password: string;
+
+    @IsOptional()
+    @IsString()
+    contact: string;
 
     @IsOptional()
     @IsString()

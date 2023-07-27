@@ -7,8 +7,9 @@ export async function up(knex: Knex) {
     table.increments();
     table.string('name').nullable();
     table.string('email').nullable();
-    table.string('contact').nullable();
+    table.string('username').nullable();
     table.string('password').nullable();
+    table.string('contact').nullable();
     table.boolean('verified').defaultTo(false);
     table.timestamp('created_at').nullable();
     table.integer('created_by').nullable();
