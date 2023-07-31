@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request, Get, Body } from '@nestjs/common';
+import { Controller, Post, Request, Get, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from './public.decorators';
 import { LoginDto } from './dto/login.dto';
@@ -15,6 +15,6 @@ export class AuthController {
 
   @Get('profile')
   getProfile(@Request() req: any) {
-    return req.user;
+    return 'ok';
   }
 }

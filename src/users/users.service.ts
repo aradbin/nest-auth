@@ -22,6 +22,10 @@ export class UsersService {
     return await this.modelClass.query().find().findById(id)
   }
 
+  async findByUsername(username: string) {
+    return await this.modelClass.query().find().where('username', username).first()
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.modelClass.query().findById(id).update(updateUserDto)
     
