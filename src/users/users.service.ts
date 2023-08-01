@@ -22,8 +22,8 @@ export class UsersService {
     return await this.modelClass.query().find().findById(id)
   }
 
-  async findByUsername(username: string) {
-    return await this.modelClass.query().find().where('username', username).first()
+  async findByEmail(email: string) {
+    return await this.modelClass.query().find().where('email', email).first()
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
