@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ModelClass } from 'objection';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { ModelClass } from 'objection';
 import { CategoryModel } from './category.model';
 
 @Injectable()
@@ -15,11 +15,11 @@ export class CategoriesService {
   }
 
   async findAll(params: any = {}) {
-    return await this.modelClass.query().find().paginate(params).withGraphFetched('[parent,children]')
+    return await this.modelClass.query().withGraphFetched('children').where('parent_id', null).find().paginate(params)
   }
 
   async findOne(id: number) {
-    const data = await this.modelClass.query().find().findById(id).withGraphFetched('[parent,children]')
+    const data = await this.modelClass.query().find().findById(id).withGraphFetched('children')
     if(!data){
       throw new NotFoundException('User not found')
     }
