@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UnprocessableEntityException, Query, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UnprocessableEntityException, Query, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -13,7 +12,7 @@ export class UsersController {
     try {
       const data = await this.usersService.create(createUserDto);
       return {
-        message: 'New User Created Successfully',
+        message: 'New user created successfully',
         data: data
       }
     } catch (error) {
@@ -27,15 +26,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number, @Res() response: Response) {
-    const data = await this.usersService.findOne(id);
-    if(data){
-      return response.status(HttpStatus.OK).send(data)
-    }else{
-      return response.status(HttpStatus.NOT_FOUND).send({
-        message: 'No User Found'
-      })
-    }
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.usersService.findOne(id);
   }
 
   @Patch(':id')
@@ -43,7 +35,7 @@ export class UsersController {
     try {
       await this.usersService.update(id, updateUserDto);
       return {
-        message: 'User Updated Successfully',
+        message: 'User updated successfully',
         data: id
       }
     } catch (error) {
@@ -56,7 +48,7 @@ export class UsersController {
     try {
       await this.usersService.remove(id);
       return {
-        message: 'User Deleted Successfully',
+        message: 'User deleted successfully',
         data: id
       }
     } catch (error) {

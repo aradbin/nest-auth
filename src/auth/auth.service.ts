@@ -16,12 +16,12 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const hasUsername = await this.usersService.findByEmail(registerDto.email)
-    if(hasUsername){
-      throw new NotAcceptableException('Username already exists')
+    const user = await this.usersService.findByEmail(registerDto.email)
+    if(user){
+      throw new NotAcceptableException('Email already exists')
     }
     const hash = bcrypt.hashSync(registerDto.password, 10);
-
+    
     return await this.modelClass.query().insert({ ...registerDto, password: hash });
   }
 
