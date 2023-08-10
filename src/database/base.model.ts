@@ -15,9 +15,17 @@ export class BaseModel extends Model {
 
     $beforeInsert() {
         this.created_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const request = (global as any).requestContext;
+        if(request?.user?.id){
+            this.created_by = request.user.id;   
+        }
     }
 
     $beforeUpdate() {
         this.updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const request = (global as any).requestContext;
+        if(request?.user?.id){
+            this.updated_by = request.user.id;   
+        }
     }
 }

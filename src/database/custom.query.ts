@@ -15,6 +15,10 @@ export class CustomQueryBuilder<M extends Model, R = M[]> extends QueryBuilder<M
     softDelete(id: number) {
         const patch = {};
         patch['deleted_at'] = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const request = (global as any).requestContext;
+        if(request?.user?.id){
+            patch['deleted_by'] = request.user.id;   
+        }
         
         return this.findById(id).patch(patch);
     }
