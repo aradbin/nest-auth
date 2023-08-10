@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotAcceptableException } from '@nestjs/common';
 import { ModelClass } from 'objection';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserModel } from './user.model';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +12,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return await this.modelClass.query().insert(createUserDto);
+    const user = this.findByEmail(createUserDto.email)
+    if(user){
+      throw new NotAcceptableException('Email already exists')
+    }
+    const hash = bcrypt.hashSync(createUserDto.password, 10);
+    return await this.modelClass.query().insert({ ...createUserDto, password: hash });
   }
 
   async findAll(params: any = {}) {
@@ -27,6 +33,10 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
+    const hasUser = this.modelClass.query().find().where('id','!=',id).where('email',updateUserDto.email).first()
+    if(hasUser){
+      throw new NotAcceptableException('Email already exists')
+    }
     const user = await this.modelClass.query().findById(id).update(updateUserDto)
     
     return user
