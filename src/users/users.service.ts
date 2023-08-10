@@ -12,7 +12,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = this.findByEmail(createUserDto.email)
+    const user = await this.findByEmail(createUserDto.email)
     if(user){
       throw new NotAcceptableException('Email already exists')
     }
@@ -33,13 +33,11 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const hasUser = this.modelClass.query().find().where('id','!=',id).where('email',updateUserDto.email).first()
+    const hasUser = await this.modelClass.query().find().where('id','!=',id).where('email',updateUserDto.email).first()
     if(hasUser){
       throw new NotAcceptableException('Email already exists')
     }
-    const user = await this.modelClass.query().findById(id).update(updateUserDto)
-    
-    return user
+    return await this.modelClass.query().findById(id).update(updateUserDto)
   }
 
   async remove(id: number) {
